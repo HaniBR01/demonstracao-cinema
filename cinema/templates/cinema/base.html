@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cinema{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'cinema/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'home' %}">CINEMA</a>
+        <nav aria-label="Navegação principal">
+            <a class="nav-link" href="{% url 'cart-detail' %}">
+                Carrinho <span class="cart-count">{{ cart.total_quantity }}</span>
+            </a>
+        </nav>
+    </header>
+    <main class="page-shell">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,6 +1,8 @@
-from django.http import HttpResponse
 from django.urls import path
 
+from .views import cart_detail, home
+
 urlpatterns = [
-    path('', lambda request: HttpResponse('hello world')),
+    path('', home, name='home'),
+    path('carrinho/', cart_detail, name='cart-detail'),
 ]
