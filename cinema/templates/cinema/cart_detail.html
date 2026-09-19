@@ -1,0 +1,42 @@
+{% extends 'cinema/base.html' %}
+
+{% block title %}Carrinho | Cinema{% endblock %}
+
+{% block content %}
+<section class="cart-page">
+    <div class="section-heading">
+        <p class="eyebrow">Sua seleção</p>
+        <h1>Carrinho</h1>
+    </div>
+
+    {% if cart.items.exists %}
+        <div class="cart-layout">
+            <div class="item-list">
+                {% for item in cart.items.all %}
+                    <article class="cart-item">
+                        <div>
+                            <p class="item-type">{{ item.item_type }}</p>
+                            <h2>Item {{ item.item_id }}</h2>
+                            <p class="item-meta">{{ item.quantity }} unidade{{ item.quantity|pluralize }} &middot; R$ {{ item.unit_price|floatformat:2 }} cada</p>
+                        </div>
+                        <strong>R$ {{ item.subtotal|floatformat:2 }}</strong>
+                    </article>
+                {% endfor %}
+            </div>
+            <aside class="summary">
+                <p class="summary-label">Resumo do pedido</p>
+                <div class="summary-row"><span>Itens</span><span>{{ cart.total_quantity }}</span></div>
+                <div class="summary-total"><span>Total</span><strong>R$ {{ cart.total_price|floatformat:2 }}</strong></div>
+                <button class="primary-button" type="button" disabled>Continuar</button>
+            </aside>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">＋</div>
+            <h2>Seu carrinho está vazio</h2>
+            <p>Quando você escolher ingressos ou complementos, eles aparecerão aqui.</p>
+            <a class="primary-button" href="{% url 'home' %}">Voltar para o início</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
