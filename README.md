@@ -21,7 +21,7 @@ cart.total_price
 
 ## TODO incremental
 
-- [ ] Implementar catálogo de filmes e sessões.
+- [x] Implementar catálogo de filmes e sessões.
 - [ ] Implementar cadastro e venda de lanches.
 - [ ] Implementar limitação da quantidade disponível para filmes/sessões e lanches.
 
