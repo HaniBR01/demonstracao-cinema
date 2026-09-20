@@ -1,0 +1,46 @@
+{% extends 'cinema/base.html' %}
+
+{% block title %}{{ movie.title }} | Cinema{% endblock %}
+
+{% block content %}
+<section class="movie-detail">
+    <a class="back-link" href="{% url 'home' %}#catalogo">← Voltar para filmes</a>
+    <div class="movie-detail-layout">
+        {% if movie.poster_url %}
+            <img class="movie-detail-poster" src="{{ movie.poster_url }}" alt="Pôster de {{ movie.title }}">
+        {% else %}
+            <div class="movie-detail-poster movie-poster-placeholder" aria-hidden="true">CINEMA</div>
+        {% endif %}
+        <div>
+            <p class="eyebrow">Em cartaz</p>
+            <h1>{{ movie.title }}</h1>
+            <p class="movie-facts">{{ movie.duration_minutes }} min{% if movie.classification %} · Classificação {{ movie.classification }}{% endif %}</p>
+            <p class="detail-synopsis">{{ movie.synopsis }}</p>
+        </div>
+    </div>
+</section>
+
+<section class="sessions" aria-labelledby="sessions-title">
+    <div class="section-heading">
+        <p class="eyebrow">Programação</p>
+        <h2 id="sessions-title">Próximas sessões</h2>
+    </div>
+    {% if screenings %}
+        <div class="session-list">
+            {% for screening in screenings %}
+                <article class="session-card">
+                    <time datetime="{{ screening.starts_at|date:'c' }}">{{ screening.starts_at|date:"d/m/Y · H:i" }}</time>
+                    <span>Sala {{ screening.auditorium }}</span>
+                    {% if screening.format %}<span>{{ screening.format }}</span>{% endif %}
+                    {% if screening.language %}<span>{{ screening.language }}</span>{% endif %}
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state catalogue-empty">
+            <h3>Sem sessões programadas</h3>
+            <p>Novos horários serão divulgados em breve.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
