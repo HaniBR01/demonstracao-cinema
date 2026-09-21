@@ -10,7 +10,7 @@ def get_session_cart(request):
     cart = Cart.objects.filter(id=cart_id).first() if cart_id else None
     if cart is None:
         cart = Cart.objects.create()
-        request.session['cart_id'] = cart.id
+        request.session['id_cart'] = cart.id
     return cart
 
 
