@@ -93,8 +93,8 @@ class Cart(models.Model):
     def total_quantity(self):
         return sum(item.quantity for item in self.items.all())
 
-    def add_item(self, item_id, item_type, unit_price, quantity=1):
-        """Add an item or increase the quantity of an existing item."""
+    def add_item(self, product, quantity=1):
+        """Add a product or increase the quantity of an existing product."""
         candidate = CartItem(
             cart=self,
             item_id=str(item_id),
