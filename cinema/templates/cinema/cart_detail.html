@@ -15,8 +15,8 @@
                 {% for item in cart.items.all %}
                     <article class="cart-item">
                         <div>
-                            <p class="item-type">{{ item.item_type }}</p>
-                            <h2>Item {{ item.item_id }}</h2>
+                            <p class="item-type">{% if item.item_type == 'snack' %}Lanche{% else %}{{ item.item_type }}{% endif %}</p>
+                            <h2>{% if item.item_type == 'snack' %}{{ item.item_id }}{% else %}Item {{ item.item_id }}{% endif %}</h2>
                             <p class="item-meta">{{ item.quantity }} unidade{{ item.quantity|pluralize }} &middot; R$ {{ item.unit_price|floatformat:2 }} cada</p>
                         </div>
                         <strong>R$ {{ item.subtotal|floatformat:2 }}</strong>

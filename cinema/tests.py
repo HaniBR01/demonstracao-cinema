@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Cart, Movie, Screening
+from .models import Cart, Movie, Screening, Snack
 
 
 class CartTests(TestCase):
@@ -118,3 +118,45 @@ class CatalogueTests(TestCase):
 
         self.assertNotContains(self.client.get('/'), 'A Chegada')
         self.assertEqual(self.client.get('/filmes/a-chegada/').status_code, 404)
+
+
+class SnackSalesTests(TestCase):
+    def setUp(self):
+        self.snack = Snack.objects.create(
+            name='Pipoca grande',
+            slug='pipoca-grande',
+            description='Pipoca salgada recém-preparada.',
+            price=Decimal('18.50'),
+        )
+
+    def test_catalogue_lists_active_snacks(self):
+        response = self.client.get('/lanches/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Pipoca grande')
+        self.assertContains(response, 'R$ 18.50')
+
+    def test_post_adds_snack_to_session_cart(self):
+        response = self.client.post('/lanches/pipoca-grande/adicionar/')
+
+        self.assertRedirects(response, '/lanches/')
+        cart = Cart.objects.get(id=self.client.session['cart_id'])
+        item = cart.items.get(item_type='snack', item_id='pipoca-grande')
+        self.assertEqual(item.quantity, 1)
+        self.assertEqual(item.unit_price, Decimal('18.50'))
+
+    def test_get_does_not_sell_snack(self):
+        response = self.client.get('/lanches/pipoca-grande/adicionar/')
+
+        self.assertRedirects(response, '/lanches/')
+        self.assertFalse(Cart.objects.filter(items__item_id='pipoca-grande').exists())
+
+    def test_inactive_snack_is_not_available_for_sale(self):
+        self.snack.is_active = False
+        self.snack.save(update_fields=('is_active',))
+
+        self.assertNotContains(self.client.get('/lanches/'), 'Pipoca grande')
+        self.assertEqual(
+            self.client.post('/lanches/pipoca-grande/adicionar/').status_code,
+            404,
+        )
