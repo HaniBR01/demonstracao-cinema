@@ -1,0 +1,41 @@
+{% extends 'cinema/base.html' %}
+
+{% block title %}Lanches | Cinema{% endblock %}
+
+{% block content %}
+<section class="catalogue" aria-labelledby="snack-catalogue-title">
+    <div class="section-heading">
+        <p class="eyebrow">Para acompanhar</p>
+        <h1 id="snack-catalogue-title">Lanches</h1>
+    </div>
+
+    {% if snacks %}
+        <div class="movie-grid">
+            {% for snack in snacks %}
+                <article class="movie-card">
+                    {% if snack.image_url %}
+                        <img class="movie-poster" src="{{ snack.image_url }}" alt="{{ snack.name }}">
+                    {% else %}
+                        <div class="movie-poster movie-poster-placeholder" aria-hidden="true">SNACK</div>
+                    {% endif %}
+                    <div class="movie-card-content">
+                        <p class="item-type">Lanche</p>
+                        <h2>{{ snack.name }}</h2>
+                        <p class="movie-synopsis">{{ snack.description }}</p>
+                        <p class="session-preview">R$ {{ snack.price|floatformat:2 }}</p>
+                        <form method="post" action="{% url 'add-snack-to-cart' snack.slug %}">
+                            {% csrf_token %}
+                            <button class="primary-button" type="submit">Adicionar ao carrinho</button>
+                        </form>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state catalogue-empty">
+            <h2>Nenhum lanche disponível</h2>
+            <p>Volte em breve para conferir as opções.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

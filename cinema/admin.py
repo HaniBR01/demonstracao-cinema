@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Cart, CartItem, Movie, Screening
+from .models import Cart, CartItem, Movie, Screening, Snack
 
 
 class ScreeningInline(admin.TabularInline):
@@ -22,6 +22,14 @@ class ScreeningAdmin(admin.ModelAdmin):
     list_display = ('movie', 'starts_at', 'auditorium', 'format', 'language')
     list_filter = ('auditorium', 'format', 'language')
     search_fields = ('movie__title',)
+
+
+@admin.register(Snack)
+class SnackAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'is_active')
+    list_filter = ('is_active',)
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name', 'description')
 
 
 admin.site.register(Cart)

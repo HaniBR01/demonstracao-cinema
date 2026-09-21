@@ -49,6 +49,30 @@ class Screening(models.Model):
         return f'{self.movie} — {self.starts_at:%d/%m/%Y %H:%M}'
 
 
+class Snack(models.Model):
+    """A snack available for sale in the cinema."""
+
+    name = models.CharField(max_length=120)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+    )
+    image_url = models.URLField(blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('snack-catalog')
+
+
 class Cart(models.Model):
     """A shopping cart that can contain any kind of sellable item."""
 
