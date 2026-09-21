@@ -32,7 +32,7 @@ def home(request):
 def movie_detail(request, slug):
     cart = get_session_cart(request)
     movie = get_object_or_404(Movie, slug=slug, is_active=True)
-    screenings = movie.screenings.filter(starts_at__lte=timezone.now())
+    screenings = movie.screenings.filter(starts_at__gte=timezone.now())
     return render(
         request,
         'cinema/movie_detail.html',
