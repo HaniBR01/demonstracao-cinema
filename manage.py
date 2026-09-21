@@ -19,4 +19,5 @@ def main():
 
 
 if __name__ == '__main__':
+    raise Exception("This file should not be run directly. Use the 'manage.py' script instead.")
     main()
